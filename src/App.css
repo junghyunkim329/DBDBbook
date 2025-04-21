@@ -1,0 +1,47 @@
+.App {
+  text-align: center;
+}
+
+.nav {
+  background : #638a7e;
+  width : 100%;
+  display : flex;
+  color : white;
+  padding : 20px;
+}
+
+.buttons {
+  margin: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.button {
+  background-color: #ffffff;
+  border: 2px solid #638a7e;
+  color: #638a7e;
+  padding: 15px 32px;
+  max-width: 250px; /* 각 버튼의 최대 너비 */
+  display: inline-block;
+  font-size: 16px;
+  flex: 1;
+  /*margin: 4px 30px;*/
+  cursor: pointer;
+  border-radius: 12px;
+  transition-duration: 0.4s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.such{
+  border: 2px solid #638a7e;
+  margin: 10%;
+  }
+
+.casename{
+  text-align: left;
+  margin-top: 30px;
+  margin-left: 30px;
+}
+
