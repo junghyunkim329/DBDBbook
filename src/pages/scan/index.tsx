@@ -15,7 +15,7 @@ import { BrowserMultiFormatReader } from "@zxing/library"
 import { Html5QrcodeScanner } from "html5-qrcode"
 import type { Book } from "../../types/book"
 
-const API_URL = "http://localhost:5000/api"
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function Scan() {
   const navigate = useNavigate()
@@ -33,6 +33,7 @@ export default function Scan() {
     description: "",
     thumbnail: "",
   })
+  const [userEmail, setUserEmail] = useState("") // 사용자 이메일 상태 추가
 
   useEffect(() => {
     if (!isScanning) return // 스캔 중일 때만 실행
@@ -53,7 +54,7 @@ export default function Scan() {
       console.log("Scanned barcode:", decodedText)
 
       // 스캔한 바코드 데이터를 백엔드로 전송
-      fetch("http://localhost:5000/api/barcode", {
+      fetch(`${API_URL}/barcode`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ barcode: decodedText }),
@@ -149,31 +150,43 @@ export default function Scan() {
     }
   }
 
-  const handleSave = async () => {
-    if (!bookData.title || !bookData.author) {
-      alert("제목과 저자는 필수 입력 항목입니다")
+  const handleAddToBookshelf = async () => {
+    if (!bookData.isbn || !bookData.title || !bookData.author) {
+      alert("필수 정보가 누락되었습니다. ISBN, 제목, 저자는 필수 항목입니다.")
       return
     }
 
-    setIsSaving(true)
     try {
-      const response = await fetch(`${API_URL}/books`, {
+      // LocalStorage에 추가
+      const savedBooks = JSON.parse(localStorage.getItem("myBooks") || "[]")
+      const bookExists = savedBooks.some((book) => book.isbn === bookData.isbn)
+
+      if (!bookExists) {
+        savedBooks.push(bookData)
+        localStorage.setItem("myBooks", JSON.stringify(savedBooks))
+      }
+
+      // 데이터베이스에 추가
+      const response = await fetch(`${API_URL}/books/personal`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(bookData),
+        body: JSON.stringify({
+          isbn: bookData.isbn,
+          UserEMAIL: userEmail,
+          publisher: bookData.publisher,
+          date: new Date().toISOString(),
+        }),
       })
 
       if (response.ok) {
-        alert("책이 성공적으로 등록되었습니다!")
-        navigate("/bookshelf")
+        alert("책이 성공적으로 내 책방에 추가되었습니다.")
       } else {
-        alert("책 등록에 실패했습니다")
+        const error = await response.json()
+        alert(`저장 실패: ${error.message}`)
       }
     } catch (error) {
-      console.error("Failed to save book:", error)
-      alert("책 등록 중 오류가 발생했습니다")
-    } finally {
-      setIsSaving(false)
+      console.error("내 책방에 추가 중 오류 발생:", error)
+      alert("내 책방에 추가하는 중 오류가 발생했습니다.")
     }
   }
 
@@ -211,7 +224,6 @@ export default function Scan() {
                 <span className="w-full border-t" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">또는</span>
               </div>
             </div>
 
@@ -318,11 +330,15 @@ export default function Scan() {
                 </div>
 
                 <div>
-                  <Label htmlFor="description">설명</Label>
+                  <Label htmlFor="description">메모 (최대 1000자)</Label>
                   <Textarea
                     id="description"
                     value={bookData.description}
-                    onChange={(e) => setBookData({ ...bookData, description: e.target.value })}
+                    onChange={(e) => {
+                      if (e.target.value.length <= 1000) {
+                        setBookData({ ...bookData, description: e.target.value })
+                      }
+                    }}
                     rows={4}
                   />
                 </div>
@@ -335,7 +351,7 @@ export default function Scan() {
                 </div>
               </div>
 
-              <Button onClick={handleSave} className="w-full" size="lg" disabled={isSaving}>
+              <Button onClick={handleAddToBookshelf} className="w-full" size="lg" disabled={isSaving}>
                 {isSaving ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

@@ -8,7 +8,7 @@ import { Badge } from "../../components/ui/Badge"
 import { Search, Grid3x3, List, BookOpen, Trash2, Filter } from "lucide-react"
 import type { Book } from "../../types/book"
 
-const API_URL = "http://localhost:5000/api"
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function Bookshelf() {
   const [books, setBooks] = useState<Book[]>([])

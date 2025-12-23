@@ -6,6 +6,8 @@ import { Button } from "../../components/ui/Button"
 import Pagination from "../../components/Pagination"
 import { Loader2 } from "lucide-react"
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 interface BookItem {
   id: string
   title: string

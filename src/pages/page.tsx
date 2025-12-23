@@ -8,7 +8,7 @@ import { Input } from "../components/ui/Input"
 import { Card, CardContent } from "../components/ui/Card"
 import { Button } from "../components/ui/Button"
 
-const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:5000/api"
+const API_URL = import.meta.env.VITE_API_URL
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("")
@@ -92,7 +92,7 @@ export default function Home() {
           </form>
 
           {/* Category Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto justify-center items-center">
             <Link to="/scan">
               <Card className="hover:bg-accent/10 transition-colors cursor-pointer h-full">
                 <CardContent className="flex flex-col items-center justify-center p-8 gap-4">
@@ -119,6 +119,54 @@ export default function Home() {
               </Card>
             </Link>
           </div>
+
+          {/* Recent Books Section */}
+          <section className="py-16 px-4">
+            <div className="container max-w-6xl mx-auto">
+              <div className="flex items-center justify-between mb-8">
+                <h2 className="text-3xl font-bold">{sectionTitle}</h2>
+                {recentBooks.length > 0 && (
+                  <Link to="/bookshelf">
+                    <Button variant="outline">전체 보기</Button>
+                  </Link>
+                )}
+              </div>
+
+              {displayBooks.length > 0 ? (
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                  {displayBooks.map((book) => (
+                    <Card key={book.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                      <div className="aspect-[2/3] bg-muted relative">
+                        {book.thumbnail ? (
+                          <img
+                            src={book.thumbnail || "/placeholder.svg"}
+                            alt={book.title}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <BookOpen className="h-12 w-12 text-muted-foreground" />
+                          </div>
+                        )}
+                      </div>
+                      <CardContent className="p-4">
+                        <h3 className="font-semibold text-sm line-clamp-2 mb-1">{book.title}</h3>
+                        <p className="text-xs text-muted-foreground line-clamp-1">{book.author}</p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <Card className="p-12">
+                  <div className="text-center text-muted-foreground">
+                    <BookOpen className="h-16 w-16 mx-auto mb-4 opacity-50" />
+                    <p className="text-lg">{searchQuery ? "검색 결과가 없습니다" : "등록된 책이 없습니다"}</p>
+                    <p className="text-sm mt-2">{!searchQuery && "바코드 스캔으로 첫 번째 책을 등록해보세요"}</p>
+                  </div>
+                </Card>
+              )}
+            </div>
+          </section>
         </>
       )}
     </div>
