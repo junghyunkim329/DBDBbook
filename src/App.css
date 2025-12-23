@@ -3,7 +3,7 @@
   width : 100%;
   display : flex;
   color : white;
-  padding: 30px 30px 30px 50px;
+  padding: 5px 5px 5px 50px;
 }
 
 .top {
@@ -63,6 +63,7 @@
 
 .bookcase{
   margin: 30px;
+  margin-bottom: 300px;
 }
 
 .case-name{
@@ -93,4 +94,13 @@
 .group-divider{
   border-top: 1px solid #ccc;
   margin-top: 10px;
+}
+
+.app-info{
+  margin: 30px;
+  color: #ccc;
+}
+
+.line {
+  /*라인 색 회색으로 변경하기*/
 }

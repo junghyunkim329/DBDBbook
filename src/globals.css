@@ -1,0 +1,39 @@
+/* TailwindCSS 기본 설정 */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 사용자 정의 테마 */
+@layer base {
+  :root {
+    --color-background: #0f0f0f;
+    --color-foreground: #fafafa;
+    --color-card: #1a1a1a;
+    --color-card-foreground: #fafafa;
+    --color-primary: #6366f1;
+    --color-primary-foreground: #fafafa;
+    --color-secondary: #27272a;
+    --color-secondary-foreground: #fafafa;
+    --color-muted: #27272a;
+    --color-muted-foreground: #a1a1aa;
+    --color-accent: #4f46e5;
+    --color-accent-foreground: #fafafa;
+    --color-border: #27272a;
+    --color-input: #27272a;
+    --color-ring: #6366f1;
+
+    --radius: 0.5rem;
+
+    --font-sans: "Noto Sans KR", system-ui, -apple-system, sans-serif;
+  }
+}
+
+* {
+  border-color: hsl(var(--color-border));
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: hsl(var(--color-background));
+  color: hsl(var(--color-foreground));
+}

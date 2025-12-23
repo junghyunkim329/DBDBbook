@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["*"]
+    },
+    "target": "esnext",
+    "module": "nodenext",
+    "lib": ["DOM", "ESNext"],
+    "jsx": "react-jsx",
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true,
+
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    "types": ["vite/client", "node"]
+  },
+  "include": ["src"]
+}
